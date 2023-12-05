@@ -1,0 +1,48 @@
+{
+  // These settings tweaks to the cmake plugin will ensure
+  // that you debug using cortex-debug instead of trying to launch
+  // a Pico binary on the host
+  "cmake.statusbar.advanced": {
+    "debug": {
+      "visibility": "hidden"
+    },
+    "launch": {
+      "visibility": "hidden"
+    },
+    "build": {
+      "visibility": "hidden"
+    },
+    "buildTarget": {
+      "visibility": "hidden"
+    }
+  },
+  "cmake.buildBeforeRun": true,
+  "cmake.configureOnOpen": true,
+  "cmake.configureSettings": {
+    "CMAKE_MODULE_PATH": "${env:PICO_INSTALL_PATH}/pico-sdk-tools"
+  },
+  "cmake.generator": "Ninja",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "files.associations": {
+    "*.html": "html",
+    "*.txt": "cmake",
+    "stdlib.h": "c",
+    "osal_freertos.h": "c",
+    "pio.h": "c",
+    "i8080.pio.h": "c",
+    "gpio.h": "c",
+    "rtos_task.h": "c",
+    "lv_demos.h": "c",
+    "dma.h": "c",
+    "io_config.h": "c",
+    "lv_conf.h": "c",
+    "lvgl.h": "c",
+    "lv_obj.h": "c",
+    "stdio_usb.h": "c",
+    "stdio.h": "c",
+    "tusb.h": "c",
+    "queue.h": "c",
+    "freertos.h": "c"
+  },
+  "cortex-debug.variableUseNaturalFormat": false
+}

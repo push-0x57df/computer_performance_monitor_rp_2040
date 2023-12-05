@@ -1,0 +1,42 @@
+
+.program i8080
+.side_set 2
+
+.wrap_target
+loop:
+    nop side 0x3
+    out pins, 8 side 0x0
+    jmp loop side 0x3
+.wrap
+
+% c-sdk {
+#include "hardware/clocks.h"
+
+static inline void i8080_program_init(PIO pio, uint sm, uint offset, uint out_pin, uint out_pin_len, uint sideset_pin, uint sideset_pin_len) {
+    pio_sm_config c = i8080_program_get_default_config(offset);
+
+    sm_config_set_out_pins(&c, out_pin, out_pin_len);
+    sm_config_set_set_pins(&c, out_pin, out_pin_len);
+    sm_config_set_sideset_pins(&c, sideset_pin - 1);
+
+    int i;
+
+    uint both_pins = 0;
+    for(i = out_pin; i < out_pin + out_pin_len; i++){
+        pio_gpio_init(pio, i);
+        both_pins = both_pins | (1u << i);
+    }
+
+    for(i = sideset_pin; i < sideset_pin + sideset_pin_len; i++){
+        pio_gpio_init(pio, i);
+        both_pins = both_pins | (1u << i);
+    }
+
+    sm_config_set_out_shift(&c, false, true, 8);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+    pio_sm_set_pindirs_with_mask(pio, sm, both_pins, both_pins);
+    sm_config_set_clkdiv(&c, 3);
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}
